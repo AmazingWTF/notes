@@ -53,7 +53,8 @@ class Dep {
     }
 
     notify(newVal, oldVal) {
-        this.subs.forEach(func => func(newVal, oldVal);
+        // this.subs.forEach(func => func(newVal, oldVal);
+        this.subs.forEach(watcher => watcher.update());
     }
 }
 
@@ -73,14 +74,15 @@ let defineRective = function(obj, key, value) {
         get: function() {
             if (Dep.target) {
                 dep.addSub(Dep.target);
+                Dep.target.addDep(dep);
             }
             return value;
         },
         set: function(newvVal) {
             if (newVal !== oldVal) {
-                dep.notify(newVal, value);
+                value = newVal;
+                dep.notify();
             }
-            value = newVal;
         }
     })
 }
