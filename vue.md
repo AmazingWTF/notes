@@ -46,13 +46,13 @@ class Dep {
     }
 
     removeSub(sub) {
-        const index = this.sbus.indexOf(sub);
+        const index = this.subs.indexOf(sub);
         if (index >= 0) {
-            this.sbus.splice(index, 1);
+            this.subs.splice(index, 1);
         }
     }
 
-    notify(newVal, oldVal) {
+    notify() {
         // this.subs.forEach(func => func(newVal, oldVal);
         this.subs.forEach(watcher => watcher.update());
     }
@@ -66,7 +66,7 @@ Dep.target = null;
 ## defineReactive
 > 功能：遍历对象每个属性，便捷实现依赖收集
 ``` javascript
-let defineRective = function(obj, key, value) {
+let defineReactive = function(obj, key, value) {
     let dep = new Dep();
     Object.defineProperty(obj, key, {
         configurable: true,
@@ -78,8 +78,8 @@ let defineRective = function(obj, key, value) {
             }
             return value;
         },
-        set: function(newvVal) {
-            if (newVal !== oldVal) {
+        set: function(newVal) {
+            if (newVal !== value) {
                 value = newVal;
                 dep.notify();
             }
@@ -97,9 +97,9 @@ let defineRective = function(obj, key, value) {
 > 功能：
 ``` javascript
     class Watcher {
-        constructor(obj, key, callback) {
+        constructor(obj, getter, callback) {
             this.obj = obj;
-            this.getter = key;
+            this.getter = getter;
             this.cb = callback;
             this.deps = [];
             // this.value = undefined;
@@ -109,25 +109,32 @@ let defineRective = function(obj, key, value) {
         // 将当前watcher实例赋值给Dep.target，完成依赖收集
         get() {
             Dep.target = this;
-            let value = this.obj[this.getter];
+            let value = this.getter.call(this.obj);
             Dep.target = null
             return value;
         }
             
         addDep(dep) {
-            const index = this.deps.indexOf(dep);
-            if (index >= 0) {
-                this.dep.push(dep);
-            }
+            this.deps.push(dep);
         }
 
         // 依赖变化时，执行回调
         update() {
-            const value = this.obj[this.getter];
-            const oldValue = this.value;
+            const value = this.getter.call(this.obj);
+            const oldVal = this.value;
             this.value = value;
             this.cb.call(this.obj, value, oldVal);
+        }
+
+        // 取消所有依赖
+        tearDown() {
+            let i = this.deps.length;
+            while (i--) {
+                this.deps[i].removeSub(this);
+            }
+            this.deps = [];
         }
     }
 ```
 > 要素：监听对象、取值方法、对应的回调、需要监听的值、取值函数、触发函数
+
