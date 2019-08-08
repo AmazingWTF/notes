@@ -68,6 +68,8 @@ Dep.target = null;
 ``` javascript
 let defineReactive = function(obj, key, value) {
     let dep = new Dep();
+    // 遍历传入的value
+    observe(value);
     Object.defineProperty(obj, key, {
         configurable: true,
         enumerable: true,
@@ -94,7 +96,7 @@ let defineReactive = function(obj, key, value) {
 <hr/>
 
 ## Watcher
-> 功能：
+> 功能：就是一个具体的观察者，注册到目标中
 ``` javascript
     class Watcher {
         constructor(obj, getter, callback) {
@@ -140,12 +142,59 @@ let defineReactive = function(obj, key, value) {
 
 <hr/>
 
+## Observe
+> 功能：便利目标，不用手动遍历
+``` javascript
+    class Observer {
+        constructor(value) {
+            this.value = value;
+            this.walk(value);
+            Object.defineProperty(value, '__ob__', {
+                value: this,
+                enumerable: false,
+                writable: true,
+                configurable: true
+            })
+        }
+
+        walk(obj) {
+            const keys = Object.keys(obj);
+            for (let i = 0; i < keys.length; i++) {
+                defineReactive(obj, keys[i], obj[keys[i]]);
+            }
+        }
+    }
+
+    function observe(value) {
+        if (typeof obj !== 'object') {
+            return;
+        }
+        let ob;
+        if (value.hasOwnProperty('__ob__') && value.__ob__ instanceof Observer) {
+            ob = value.__ob__;
+        } else if (Object.isExtensible(value)) {
+            ob = new Observer(value);
+        }
+        return ob;
+    }
+```
+
 ## 针对数组的处理
+> 改变数组的两种方法：
+``` javascript
+    let arr = [1, 2, 3];
+
+    // 通过下标
+    arr[0] = 11;
+    // 通过数组方法
+    arr.splice(0, 11);
+```
+
 > `Object.defineProperty`方法不能监听`数组方法对数组做出的改变`，针对此原因，vue内部重写了数组方法，达到监听目的
 
 > 影响原数组的API列表
 `push` `pop` `shift` `unshift` `sort` `splice` `reverse` 
 
 ``` javascript
-class 
+// class 
 ```
