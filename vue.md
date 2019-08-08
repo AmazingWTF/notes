@@ -138,3 +138,14 @@ let defineReactive = function(obj, key, value) {
 ```
 > 要素：监听对象、取值方法、对应的回调、需要监听的值、取值函数、触发函数
 
+<hr/>
+
+## 针对数组的处理
+> `Object.defineProperty`方法不能监听`数组方法对数组做出的改变`，针对此原因，vue内部重写了数组方法，达到监听目的
+
+> 影响原数组的API列表
+`push` `pop` `shift` `unshift` `sort` `splice` `reverse` 
+
+``` javascript
+class 
+```

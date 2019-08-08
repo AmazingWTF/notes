@@ -82,19 +82,32 @@ class Watcher {
     }
 }
 
-let obj = {};
-defineReactive(obj, 'num1', 1);
-defineReactive(obj, 'num2', 2);
+// let obj = {};
+// defineReactive(obj, 'num1', 1);
+// defineReactive(obj, 'num2', 2);
 
-let watcher = new Watcher(obj, function () {
-    return this.num1 + this.num2;
+// let watcher = new Watcher(obj, function () {
+//     return this.num1 + this.num2;
+// }, function (newVal, oldVal) {
+//     console.log(`监听函数，${this.num1} + ${this.num2} = ${newVal};`);
+// });
+
+// obj.num1 = 11;
+// obj.num2 = 22;
+
+// watcher.tearDown();
+
+// obj.num1 = 1111;
+
+let arr = [];
+defineReactive(arr, 0, 1);
+defineReactive(arr, 1, 2);
+
+let watcher = new Watcher(arr, function () {
+    return this[0] + this[1];
 }, function (newVal, oldVal) {
-    console.log(`监听函数，${this.num1} + ${this.num2} = ${newVal};`);
+    console.log(`监听函数，${this[0]} + ${this[1]} =${newVal}`);
 });
 
-obj.num1 = 11;
-obj.num2 = 22;
-
-watcher.tearDown();
-
-obj.num1 = 1111;
+arr[0] = 11;
+arr[1] = 22;
