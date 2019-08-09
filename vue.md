@@ -166,7 +166,7 @@ let defineReactive = function(obj, key, value) {
     }
 
     function observe(value) {
-        if (typeof obj !== 'object') {
+        if (typeof value !== 'object') {
             return;
         }
         let ob;

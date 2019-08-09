@@ -64,7 +64,7 @@ class Observer {
 }
 
 function observe(value) {
-    if (typeof obj !== 'object') {
+    if (typeof value !== 'object') {
         return;
     }
     let ob;
@@ -116,6 +116,10 @@ class Watcher {
     }
 }
 
+/**
+ * 基本样例
+ */
+
 // let obj = {};
 // defineReactive(obj, 'num1', 1);
 // defineReactive(obj, 'num2', 2);
@@ -133,6 +137,11 @@ class Watcher {
 
 // obj.num1 = 1111;
 
+
+/**
+ * 针对数组样例
+ */
+
 // let arr = [];
 // defineReactive(arr, 0, 1);
 // defineReactive(arr, 1, 2);
@@ -146,6 +155,10 @@ class Watcher {
 // arr[0] = 11;
 // arr[1] = 22;
 
+
+/**
+ * observe 样例
+ */
 
 let object = {
     num1: 1,
@@ -167,3 +180,8 @@ object.num1 = 2
 // 监听函数，2 + 1 + 1 = 4
 object.objectTest.num3 = 2
 // 监听函数，2 + 1 + 2 = 5
+
+
+/**
+ * 针对数组的完整处理
+ */
