@@ -68,8 +68,7 @@ Dep.target = null;
 ``` javascript
 let defineReactive = function(obj, key, value) {
     let dep = new Dep();
-    // 遍历传入的value
-    observe(value);
+    let childOb = observe(value);
     Object.defineProperty(obj, key, {
         configurable: true,
         enumerable: true,
@@ -77,6 +76,9 @@ let defineReactive = function(obj, key, value) {
             if (Dep.target) {
                 dep.addSub(Dep.target);
                 Dep.target.addDep(dep);
+                if (Array.isArray(value)) {
+                    childOb.dep.addSub
+                }
             }
             return value;
         },
@@ -148,7 +150,13 @@ let defineReactive = function(obj, key, value) {
     class Observer {
         constructor(value) {
             this.value = value;
-            this.walk(value);
+            if (Array.isArray(value)) {
+                // 为数组设置特殊的dep
+                this.dep = new Dep();
+                this.ObserveArray(value);
+            } else {
+                this.walk(value);
+            }
             Object.defineProperty(value, '__ob__', {
                 value: this,
                 enumerable: false,
@@ -157,10 +165,18 @@ let defineReactive = function(obj, key, value) {
             })
         }
 
+        // 遍历对象属性，变成可监听的结构
         walk(obj) {
             const keys = Object.keys(obj);
             for (let i = 0; i < keys.length; i++) {
                 defineReactive(obj, keys[i], obj[keys[i]]);
+            }
+        }
+
+        // 遍历数组项，变成可监听结构
+        observeArray(items) {
+            for (let i = 0; i < items.length; i++) {
+                observe(items[i]);
             }
         }
     }
