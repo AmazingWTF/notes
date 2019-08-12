@@ -120,22 +120,22 @@ class Watcher {
  * 基本样例
  */
 
-// let obj = {};
-// defineReactive(obj, 'num1', 1);
-// defineReactive(obj, 'num2', 2);
+let obj = {};
+defineReactive(obj, 'num1', 1);
+defineReactive(obj, 'num2', 2);
 
-// let watcher = new Watcher(obj, function () {
-//     return this.num1 + this.num2;
-// }, function (newVal, oldVal) {
-//     console.log(`监听函数，${this.num1} + ${this.num2} = ${newVal};`);
-// });
+let watcher = new Watcher(obj, function () {
+    return this.num1 + this.num2;
+}, function (newVal, oldVal) {
+    console.log(`监听函数，${this.num1} + ${this.num2} = ${newVal};`);
+});
 
-// obj.num1 = 11;
-// obj.num2 = 22;
+obj.num1 = 11;
+obj.num2 = 22;
 
-// watcher.tearDown();
+watcher.tearDown();
 
-// obj.num1 = 1111;
+obj.num1 = 1111;
 
 
 /**
@@ -160,26 +160,26 @@ class Watcher {
  * observe 样例
  */
 
-let object = {
-    num1: 1,
-    num2: 1,
-    objectTest: {
-        num3: 1
-    }
-}
+// let object = {
+//     num1: 1,
+//     num2: 1,
+//     objectTest: {
+//         num3: 1
+//     }
+// }
 
-observe(object)
+// observe(object)
 
-let watcher = new Watcher(object, function () {
-    return this.num1 + this.num2 + this.objectTest.num3
-}, function (newValue, oldValue) {
-    console.log(`监听函数，${object.num1} + ${object.num2} + ${object.objectTest.num3} = ${newValue}`)
-})
+// let watcher = new Watcher(object, function () {
+//     return this.num1 + this.num2 + this.objectTest.num3
+// }, function (newValue, oldValue) {
+//     console.log(`监听函数，${object.num1} + ${object.num2} + ${object.objectTest.num3} = ${newValue}`)
+// })
 
-object.num1 = 2
-// 监听函数，2 + 1 + 1 = 4
-object.objectTest.num3 = 2
-// 监听函数，2 + 1 + 2 = 5
+// object.num1 = 2
+// // 监听函数，2 + 1 + 1 = 4
+// object.objectTest.num3 = 2
+// // 监听函数，2 + 1 + 2 = 5
 
 
 /**
